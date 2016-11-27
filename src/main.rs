@@ -1,10 +1,22 @@
 use std::io;
 
 fn main() {
+    // TODO: load this from a file
+    let mut list: Vec<String> = vec![];
+
     println!("rustickd v0.1.0");
-    println!("You have {} things on your todo list", 0);
+    println!("You have {} things on your todo list", list.len());
 
     loop {
+        if list.len() > 0 {
+            println!("");
+            println!("Your todo list: ");
+
+            for (index, item) in list.iter().enumerate() {
+                println!("{}. {}", index + 1, item);
+            }
+        }
+
         println!("");
         println!("Enter a command");
 
@@ -24,6 +36,7 @@ fn main() {
             break;
         }
 
-        println!("You said: {}", input);
+        println!("Adding '{}' to your todo list", input);
+        list.push(input)
     }
 }
