@@ -9,12 +9,7 @@ fn main() {
 
     loop {
         if list.len() > 0 {
-            println!("");
-            println!("Your todo list: ");
-
-            for (index, item) in list.iter().enumerate() {
-                println!("{}. {}", index + 1, item);
-            }
+            print_list(&list);
         }
 
         println!("");
@@ -38,5 +33,14 @@ fn main() {
 
         println!("Adding '{}' to your todo list", input);
         list.push(input)
+    }
+}
+
+fn print_list(list: &Vec<String>) {
+    println!("");
+    println!("Your todo list: ");
+
+    for (index, item) in list.iter().enumerate() {
+        println!("{}. {}", index + 1, item);
     }
 }
