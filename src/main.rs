@@ -40,25 +40,35 @@ fn main() {
             continue;
         }
 
-        if command[0] == "add" {
-            println!("Adding '{}' to your todo list", command[1]);
-            list.push(command[1].to_string());
-        } else if command[0] == "remove" {
-            let index: usize = match command[1].parse() {
-                Ok(result) => result,
-                Err(_) => continue,
-            };
+        // TODO: can't pattern match on vectors so figure out a nicer way to do
+        // line 36 -> this line
+        let (command, arguments) = (command[0], command[1]);
 
-            if index <= list.len() {
-                println!("Removing '{}' from your todo list", list[index - 1]);
-                list.remove(index - 1);
-            } else {
-                println!("That's not a thing");
+        match command {
+            "add" => {
+                println!("Adding '{}' to your todo list", arguments);
+                list.push(arguments.to_string());
+            }
+
+            "remove" => {
+                let index: usize = match arguments.parse() {
+                    Ok(result) => result,
+                    Err(_) => continue,
+                };
+
+                if index <= list.len() {
+                    println!("Removing '{}' from your todo list", list[index - 1]);
+                    list.remove(index - 1);
+                } else {
+                    println!("That's not a thing");
+                    continue;
+                }
+            }
+
+            _ => {
+                println!("What?");
                 continue;
             }
-        } else {
-            println!("What?");
-            continue;
         }
     }
 }
