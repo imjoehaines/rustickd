@@ -31,8 +31,20 @@ fn main() {
             break;
         }
 
-        println!("Adding '{}' to your todo list", input);
-        list.push(input)
+        // split input on the first space, so command[0] is the command and command[1] the "arguments"
+        let command: Vec<&str> = input.splitn(2, ' ').collect();
+
+        if command.len() < 2 {
+            println!("Hey, no");
+            continue;
+        }
+
+        if command[0] == "add" {
+            println!("Adding '{}' to your todo list", command[1]);
+            list.push(command[1].to_string())
+        } else {
+            println!("What?");
+        }
     }
 }
 
