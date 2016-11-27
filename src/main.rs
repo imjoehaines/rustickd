@@ -42,9 +42,23 @@ fn main() {
 
         if command[0] == "add" {
             println!("Adding '{}' to your todo list", command[1]);
-            list.push(command[1].to_string())
+            list.push(command[1].to_string());
+        } else if command[0] == "remove" {
+            let index: usize = match command[1].parse() {
+                Ok(result) => result,
+                Err(_) => continue,
+            };
+
+            if index <= list.len() {
+                println!("Removing '{}' from your todo list", list[index - 1]);
+                list.remove(index - 1);
+            } else {
+                println!("That's not a thing");
+                continue;
+            }
         } else {
             println!("What?");
+            continue;
         }
     }
 }
