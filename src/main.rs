@@ -31,7 +31,8 @@ fn main() {
             break;
         }
 
-        // split input on the first space, so command[0] is the command and command[1] the "arguments"
+        // split input on the first space, so command[0] is the command and
+        // command[1] the "arguments"
         let command: Vec<&str> = input.splitn(2, ' ').collect();
 
         if command.len() < 2 {
