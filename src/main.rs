@@ -1,10 +1,43 @@
-use std::io;
-use std::error::Error;
+extern crate getopts;
+
+use std::env;
 use std::fs::File;
-use std::io::prelude::*;
 use std::path::Path;
+use std::error::Error;
+use std::io::prelude::*;
+
+use getopts::Options;
+
+fn print_usage(program: &str, opts: Options) {
+    let brief = format!("Usage: {} [options]", program);
+    print!("{}", opts.usage(&brief));
+}
 
 fn main() {
+    let args: Vec<String> = env::args().collect();
+    let program = args[0].clone();
+
+    let mut opts = Options::new();
+    opts.optflag("h", "help", "display this help menu");
+
+    let matches = match opts.parse(&args[1..]) {
+        Ok(m) => m,
+        Err(f) => panic!(f.to_string()),
+    };
+
+    if matches.opt_present("h") {
+        print_usage(&program, opts);
+        return;
+    }
+
+    let (command, input) = if !matches.free.is_empty() {
+        let mut cloned_matches = matches.free.clone();
+        (cloned_matches.remove(0), cloned_matches.join(" "))
+    } else {
+        print_usage(&program, opts);
+        return;
+    };
+
     let path = Path::new("todo_list");
     let display = path.display();
 
@@ -36,69 +69,31 @@ fn main() {
     println!("rustickd v0.1.0");
     println!("You have {} things on your todo list", list.len());
 
-    loop {
-        if list.len() > 0 {
-            print_list(&list);
+    println!("");
+
+    match &*command {
+        "add" => {
+            println!("Adding '{}' to your todo list", input);
+            list.push(input.to_string());
         }
 
-        println!("");
-        println!("Enter a command");
+        "remove" => {
+            let index: usize = match input.parse() {
+                Ok(result) => result,
+                Err(_) => panic!(print_usage(&program, opts)),
+            };
 
-        let mut input = String::new();
-
-        io::stdin()
-            .read_line(&mut input)
-            .expect("???");
-
-        let input: String = match input.trim().parse() {
-            Ok(text) => text,
-            Err(_) => continue,
-        };
-
-        if input == "quit" {
-            println!("Bye!");
-            break;
-        }
-
-        // split input on the first space, so command[0] is the command and
-        // command[1] the "arguments"
-        let command: Vec<&str> = input.splitn(2, ' ').collect();
-
-        if command.len() < 2 {
-            println!("Hey, no");
-            continue;
-        }
-
-        // TODO: can't pattern match on vectors so figure out a nicer way to do
-        // line 36 -> this line
-        let (command, arguments) = (command[0], command[1]);
-
-        match command {
-            "add" => {
-                println!("Adding '{}' to your todo list", arguments);
-                list.push(arguments.to_string());
-            }
-
-            "remove" => {
-                let index: usize = match arguments.parse() {
-                    Ok(result) => result,
-                    Err(_) => continue,
-                };
-
-                if index <= list.len() {
-                    println!("Removing '{}' from your todo list", list[index - 1]);
-                    list.remove(index - 1);
-                } else {
-                    println!("That's not a thing");
-                    continue;
-                }
-            }
-
-            _ => {
-                println!("What?");
-                continue;
+            if index <= list.len() {
+                println!("Removing '{}' from your todo list", list[index - 1]);
+                list.remove(index - 1);
+            } else {
+                println!("That's not a thing");
             }
         }
+
+        "list" => print_list(&list),
+
+        _ => println!("I don't know what {} is :(", command),
     }
 
     let mut file = match File::create("todo_list") {
@@ -117,7 +112,6 @@ fn main() {
 }
 
 fn print_list(list: &Vec<String>) {
-    println!("");
     println!("Your todo list: ");
 
     for (index, item) in list.iter().enumerate() {
