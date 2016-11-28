@@ -78,12 +78,12 @@ fn main() {
     println!("");
 
     match &*command {
-        "add" => {
+        "add" | "a" => {
             println!("Adding '{}' to your todo list", input);
             list.push(input.to_string());
         }
 
-        "remove" => {
+        "remove" | "r" => {
             let index: usize = match input.parse() {
                 Ok(result) => result,
                 Err(_) => panic!(print_usage(&program, opts)),
@@ -97,7 +97,7 @@ fn main() {
             }
         }
 
-        "list" => {
+        "list" | "l" => {
             println!("Your todo list: ");
 
             for (index, item) in list.iter().enumerate() {
