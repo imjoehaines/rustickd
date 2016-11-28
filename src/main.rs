@@ -97,7 +97,7 @@ fn main() {
             for (index, item) in list.iter().enumerate() {
                 println!("{}. {}", index + 1, item);
             }
-        },
+        }
 
         _ => println!("I don't know what {} is :(", command),
     }
