@@ -1,8 +1,40 @@
 use std::io;
+use std::error::Error;
+use std::fs::File;
+use std::io::prelude::*;
+use std::path::Path;
 
 fn main() {
+    let path = Path::new("todo_list");
+    let display = path.display();
+
+    // create the todo list if it doesn't exist
+    if !path.exists() {
+        match File::create("todo_list") {
+            Ok(file) => file,
+            Err(why) => panic!("Couldn't create {}: {}", display, why.description()),
+        };
+    }
+
+    let mut file = match File::open(&path) {
+        Ok(file) => file,
+        Err(why) => panic!("Couldn't open {}: {}", display, why.description()),
+    };
+
+    let mut file_contents = String::new();
+    match file.read_to_string(&mut file_contents) {
+        Ok(_) => &file_contents,
+        Err(why) => panic!("Couldn't read {}: {}", display, why.description()),
+    };
+
+    println!("{}", file_contents);
+
     // TODO: load this from a file
     let mut list: Vec<String> = vec![];
+
+    for line in file_contents.lines() {
+        list.push(line.to_string());
+    };
 
     println!("rustickd v0.1.0");
     println!("You have {} things on your todo list", list.len());
