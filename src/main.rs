@@ -33,7 +33,7 @@ fn main() {
 
     for line in file_contents.lines() {
         list.push(line.to_string());
-    };
+    }
 
     println!("rustickd v0.1.0");
     println!("You have {} things on your todo list", list.len());
