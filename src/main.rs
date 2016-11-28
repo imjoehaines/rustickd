@@ -91,7 +91,13 @@ fn main() {
             }
         }
 
-        "list" => print_list(&list),
+        "list" => {
+            println!("Your todo list: ");
+
+            for (index, item) in list.iter().enumerate() {
+                println!("{}. {}", index + 1, item);
+            }
+        },
 
         _ => println!("I don't know what {} is :(", command),
     }
@@ -108,13 +114,5 @@ fn main() {
             Ok(file) => file,
             Err(why) => panic!("Couldn't write {}: {}", display, why),
         };
-    }
-}
-
-fn print_list(list: &Vec<String>) {
-    println!("Your todo list: ");
-
-    for (index, item) in list.iter().enumerate() {
-        println!("{}. {}", index + 1, item);
     }
 }
