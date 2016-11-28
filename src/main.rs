@@ -29,7 +29,6 @@ fn main() {
 
     println!("{}", file_contents);
 
-    // TODO: load this from a file
     let mut list: Vec<String> = vec![];
 
     for line in file_contents.lines() {
