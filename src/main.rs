@@ -100,6 +100,20 @@ fn main() {
             }
         }
     }
+
+    let mut file = match File::create("todo_list") {
+        Ok(file) => file,
+        Err(why) => panic!("Couldn't save todo list {}", why.description()),
+    };
+
+    for line in list {
+        let formatted_line = format!("{}\n", line);
+
+        match file.write_all(formatted_line.as_bytes()) {
+            Ok(file) => file,
+            Err(why) => panic!("Couldn't write {}: {}", display, why),
+        };
+    }
 }
 
 fn print_list(list: &Vec<String>) {
