@@ -19,6 +19,8 @@ fn print_usage(program: &str, opts: Options) {
 }
 
 fn main() {
+    println!("rustickd v{}", env!("CARGO_PKG_VERSION"));
+
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
 
@@ -71,7 +73,6 @@ fn main() {
         list.push(line.to_string());
     }
 
-    println!("rustickd v0.1.0");
     println!("You have {} things on your todo list", list.len());
 
     println!("");
