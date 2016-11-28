@@ -9,8 +9,13 @@ use std::io::prelude::*;
 use getopts::Options;
 
 fn print_usage(program: &str, opts: Options) {
-    let brief = format!("Usage: {} [options]", program);
+    let brief = format!("Usage: {} [options] <command>", program);
     print!("{}", opts.usage(&brief));
+
+    println!("\nCommands:");
+    println!("    add <stuff>\t\tadd <stuff> to your todo list");
+    println!("    remove <index>\tremove the item at <index> from your todo list");
+    println!("    list\t\tlist your todo list");
 }
 
 fn main() {
