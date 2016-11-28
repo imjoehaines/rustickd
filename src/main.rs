@@ -27,8 +27,6 @@ fn main() {
         Err(why) => panic!("Couldn't read {}: {}", display, why.description()),
     };
 
-    println!("{}", file_contents);
-
     let mut list: Vec<String> = vec![];
 
     for line in file_contents.lines() {
